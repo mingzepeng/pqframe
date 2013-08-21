@@ -52,6 +52,7 @@ class Model extends Core
 	{
 		$this->dbstuff = dbmysql::getInstance(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME,DB_CHARSET,PCONNECT);
 		$this->dbstuff->connect();
+		if(defined('DB_TABLE_PRE')) $this->tablepre = DB_TABLE_PRE;
 		$this->setTable($table);
 	}
 	
