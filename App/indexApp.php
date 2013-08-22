@@ -17,6 +17,12 @@ class indexApp extends App
 
 	public function indexAction()
 	{
+		$this->log('测试logo');
+		$this->log('test','测试logo');
+		$m = M('people');
+		$this->log($m->find());
+		//Out::log('test','test中文');
+		//Out::ajaxError('cccc');
 		$this->display('index');
 	}
 }

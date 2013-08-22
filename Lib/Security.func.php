@@ -81,79 +81,9 @@ function addslashes_deep($filter)
  	}
  }
 
-
-/**
- *   安全函数，用于对字符串或者数组中html字符以及特殊字符的转�?
- *   paremeters：string �? array
- *   returns:string ，array
- */
- function char_cv($filter)
+ function urlencode_deep($url)
  {
-    if(!isset($filter) || empty($filter))
-    {
- 		return $filter;
- 	}
- 	else
- 	{
- 		return is_array($filter) ? array_map("char_cv",$filter) : htmlspecialchars(addslashes($filter));
- 	}
-}
-
- /**
- *   安全函数，用于对字符串或者数组中中文字符的编码或解码
- *   paremeters：string �? array
- *   returns:string ，array
- */
- function base64($filter,$opi='ENCODE'){
-    if(!isset($filter) || empty($filter)){
- 		return $filter;
- 	}
- 	elseif($opi == 'ENCODE')
- 	{
-
- 		if(is_array($filter))
- 		{
- 		  foreach ($filter as $key => $value) $filter[$key] = base64_encode($value);
- 		  return $filter;
- 		}
- 		else
- 		{
- 		  return base64_encode($value);
- 		}
- 	}
- 	elseif($opi=='DECODE') 
- 	{
-
- 		if(is_array($filter))
- 		{
- 		  foreach ($filter as $key => $value) $filter[$key] =  base64_decode($value);
- 		  return $filter;
- 		}
- 		else
- 		{
- 		  return base64_decode($value);
- 		}
- 	}
- }
-
- /**
- *   安全函数，用于对字url进行编码和解码
- *   paremeters：string
- *   returns:string
- */
- function urlcode($url,$opi='ENCODE')
- {
-    if(!isset($url) || empty($url))
-    {
- 		return $url;
- 	}
- 	else
- 	{
- 		if($opi == 'ENCODE')
- 		  return rawurlencode($url);
- 		elseif($opi == 'DECODE')
- 		  return rawurldecode($url);
- 	}
+ 	return (is_array($url)) ? array_map('urlencode_deep', $url) : urlencode($url);
  }
  
  function escape_string($data = array())

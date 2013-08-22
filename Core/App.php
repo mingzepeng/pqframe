@@ -4,12 +4,11 @@ class App extends Core
 	public $_name = 'App';	
 	
 	public static $view = null;
-
+	
 	public function __construct()
 	{
-		
+
 	}
-	
 	public function display($file='',$type='put')
 	{
 		if (self::$view instanceof View) return self::$view->display($file,$type);
@@ -39,5 +38,19 @@ class App extends Core
 	{
 		$url = U($app,$action,$params,$enter);
 		header("Location:{$url}");
+	}
+
+	public function log($var,$value=null)
+	{
+		if(is_array($var)) 
+			Controller::$log_data = array_merge(Controller::$log_data,$var);
+		elseif($value === null)
+		{
+			Controller::$log_data[] = $var;
+		}
+		else
+		{
+			Controller::$log_data[$var] = $value;
+		}
 	}
 }

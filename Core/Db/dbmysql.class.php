@@ -30,12 +30,6 @@ class dbmysql
       	$this->db_charset = $charset;
       	$this->pconnect = $pconnect;
     }
-
-    public function __destruct()
-    {
-        if(self::$Instance !== null)
-          mysql_close($this->link);  
-    }
   
     static function getInstance($host,$user,$password,$dbname,$charset='utf8',$pconnect=0)
     {
@@ -46,13 +40,19 @@ class dbmysql
     public function connect()
     {
       	if ($this->pconnect == 1) 
-      	   $this->link = mysql_pconnect($this->db_host,$this->db_user,$this->db_passwd);
+      	    $this->link = mysql_pconnect($this->db_host,$this->db_user,$this->db_passwd);
       	else
-      	   $this->link = mysql_connect($this->db_host,$this->db_user,$this->db_passwd,true);
+      	    $this->link = mysql_connect($this->db_host,$this->db_user,$this->db_passwd,true);
         if (!$this->link) $this->err('无法连接数据库:'.mysql_error());
         if (!mysql_select_db($this->db_name,$this->link)) $this->err('选择数据库出错:'.mysql_error());
     	  mysql_set_charset($this->db_charset,$this->link); 
         //mysql_query("set names '{$this->db_charset}' ",$this->link);
+    }
+
+    public function close()
+    {
+        if($this->link !== null)
+            mysql_close($this->link);
     }
   
     public function err($error)

@@ -41,8 +41,6 @@ class Model extends Core
 	public $auto_output_filter = 0;
 	public $output_filter = array();
 	
-	public $debug = 0;
-	
 	
 	/**
 	 * 构造函数
@@ -58,10 +56,7 @@ class Model extends Core
 	
 	public function __destruct()
 	{
-	    if($this->debug==1)
-	    {
-	    	var_dump($this);
-	    }
+		$this->dbstuff->close();
 	    $this->dbstuff = null;
 	}
 	
@@ -78,7 +73,7 @@ class Model extends Core
 	public function setTable($table='')
 	{
 	    if ($table === '') return false;
-	    $this->table = $table;
+	    $this->table = $this->tablepre.$table;
 	    return $this;
 	}
 	
@@ -105,8 +100,7 @@ class Model extends Core
     
 	public function find($pk=array())
 	{
-		if($this->table === '' ) return false;
-		$table = $this->tablepre.$this->table;
+		if( '' === ($table = $this->table) ) return false;
 		$field = (isset($this->option['field']) && !empty($this->option['field'])) ? implode(',',$this->option['field']) : '*';
 		$join = '';
 		$where = '';
@@ -163,8 +157,7 @@ class Model extends Core
 	
 	public function findone($pk=null)
 	{
-		if($this->table === '' ) return false;
-		$table = $this->tablepre.$this->table;
+		if( '' === ($table = $this->table) ) return false;
 		$field = (isset($this->option['field']) && !empty($this->option['field'])) ? implode(',',$this->option['field']) : '*' ;
 		$join = '';
 		$condition  = '';
@@ -205,8 +198,7 @@ class Model extends Core
 	
 	public function save($pk=null)
 	{
-		if($this->table === '' ) return false;
-		$table = $this->tablepre.$this->table;
+		if( '' === ($table = $this->table) ) return false;
 		$condition = '';
 		$condition2 = '';
 		$where = '';
@@ -256,8 +248,7 @@ class Model extends Core
 	 
 	public function delete($pk=null)
 	{
-		if($this->table === '' ) return false;
-		$table = $this->tablepre.$this->table;
+		if( '' === ($table = $this->table) ) return false;
 		$condition = '';
 		$condition2 = '';
 		$where = '';
@@ -304,9 +295,7 @@ class Model extends Core
 	
 	public function add()
 	{
-		if($this->table === '' ) return false;
-		$table = $this->tablepre.$this->table;
-		if(!isset($this->table) || empty($this->table)) return false;
+		if( '' === ($table = $this->table) ) return false;
 		$fields = implode(',',array_keys($this->data));
 		$values = "'".implode("','",array_values($this->data))."'";
 		$sql = "insert into {$table} ($fields) values($values)";
@@ -455,7 +444,7 @@ class Model extends Core
 		    return null;
 	}
 	
-	public function field($fields=null)
+	public function select($fields)
 	{
 		if (is_string($fields) && $fields !== '') $fields = explode(',',$fields);
 		if (is_array($fields) && !empty($fields) ) 
@@ -465,11 +454,6 @@ class Model extends Core
 			$this->option['field'] = $fields;
 		}
 		return $this;
-	}
-	
-	public function select($fields)
-	{
-		return $this->field($fields);
 	}
 	
 	public function where($condition)

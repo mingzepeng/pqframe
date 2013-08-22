@@ -30,23 +30,11 @@ class View extends Core
     public $default_template_type = 'html';
     
     public $display_modern = 'put';    //put get
-    
-    //是否开启调试
-    public $debug = 0;
            
     public function __construct()
     {
         
     }
-    
-    public function __destruct()
-    {
-    	if($this->debug)
-    	{
-            var_dump($this);
-    	}
-    }
-    
     
 	public function assign($var=null,$value=null)
 	{
@@ -96,9 +84,10 @@ class View extends Core
     {
     	$this->before_init();    	
     	if ($type === '') $type = $this->display_modern;
-    	($template === '') && $template = $this->default_template;
+    	if($template === '')  $template = $this->default_template;
     	$template = $this->template_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
         if(!is_file($template)) $this->error('template:'.$template.' no exists');
+        
         import('Template');
         Template::$config = $this->config;
     	extract($this->data);
@@ -107,10 +96,20 @@ class View extends Core
         include($template);
         $contents = ob_get_clean();
     	$this->after_init();
+		
     	if ($type === 'put')
     	{
     		echo $contents;
-    		return ;
+	  		if(DEBUG && !empty(Controller::$log_data))
+			{
+				$log_data = array('log'=>array_map('urlencode_deep',Controller::$log_data));
+				//var_dump($log_data);
+				$log_data = urldecode(json_encode($log_data));
+				//var_dump(Controller::$log_data);
+				$log_file = ROOT.'/Lib/log.inc.php';
+				include($log_file);
+			}
+    		return true;
     	}
     	elseif ($type === 'get')
     	{

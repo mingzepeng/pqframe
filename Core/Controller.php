@@ -1,10 +1,9 @@
 <?php
 class Controller extends Core 
 {
-	
-	public $_name = 'Controller';
-	
 	public static $app = null;
+
+	public static $log_data = array();
 	
 	public static function init()
 	{
@@ -61,8 +60,6 @@ class Controller extends Core
 		//import('AppInit','inc');
 
 		$module = (defined('MODULE')) ? MODULE : DEFAULT_MODULE;
-		
-		import($module."Init",'inc');
 
 		App::$view = new View();
 		App::$view->setModule($module);

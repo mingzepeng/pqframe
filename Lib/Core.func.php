@@ -26,13 +26,14 @@ function import($class,$type='class')
 {
 	static $classes = array();
 	$class = $class.'.'.$type.'.php';
-	if (in_array($class,$classes)) return true;
-	
-    $class_path = ROOT.'/Lib/'.$class;
-    if (!is_file($class_path)) return false;
-	
-    include_once($class_path);
-    $classes[] = $class;
+	$class_path = ROOT.'/Lib/'.$class;
+	if($type !== 'inc')
+	{
+		if (!isset($classes[$type])) $classes[$type] = array();
+		if (in_array($class,$classes[$type])) return true;
+	}
+	include($class_path);
+	if($type !== 'inc') $classes[$type][] = $class;	
 	return true;
 }
 
