@@ -88,8 +88,8 @@ class View extends Core
     	$template = $this->template_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
         if(!is_file($template)) $this->error('template:'.$template.' no exists');
         
-        import('Template');
-        Template::$config = $this->config;
+        import('Page');
+        Page::$config = $this->config;
     	extract($this->data);
     	header("Content-type: text/html; charset=utf-8");
     	ob_start();

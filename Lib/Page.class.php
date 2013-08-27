@@ -1,9 +1,9 @@
 <?php
 if (!defined('IN')) die('access deined');
-class Template
+class Page
 {
 	public static $config = array();
-	
+
 	public static function import($files)
 	{	
 		$dir = self::$config['common_dir'];
@@ -22,7 +22,8 @@ class Template
 	public static function importJS($js)
 	{
 		if(!is_array($js)) $js = explode(',',$js);
-		foreach ($js as $j) {
+		foreach ($js as $j) 
+		{
 			$j .= '.js';
 			echo '<script type="text/javascript" src="'.self::$config['js_dir'].'/'.$j.'"></script>'."\r\n";			
 		}
