@@ -1,8 +1,10 @@
 <?php
 include 'init.php';
 
-define('APP',(isset($_GET['app']) && $_GET['app'] !=='')? trim($_GET['app']) : DEFAULT_APP);
+define('MODULE',(isset($_GET['m']) && $_GET['m'] !=='')? trim($_GET['m']) : DEFAULT_MODULE);
 
-define('ACTION',(isset($_GET['action']) && $_GET['action'] !=='')? trim($_GET['action']) : 'index');
+define('CONTROLLER',(isset($_GET['c']) && $_GET['c'] !=='')? trim($_GET['c']) : DEFAULT_CONTROLLER);
 
-Controller::run();
+define('ACTION',(isset($_GET['a']) && $_GET['a'] !=='')? trim($_GET['a']) : 'index');
+
+App::run();

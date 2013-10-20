@@ -1,46 +1,51 @@
 <?php
-define('DEFAULT_TIME_ZONE','Asia/Shanghai');
+return array(
+	'DEFAULT_TIME_ZONE'=>'Asia/Shanghai',
 
-define('HOST','http://localhost/pqframe');
+	'HOST'=>'http://localhost/pqframe',
 
-define('APP_NAME','网站名称');
+	'APP_NAME'=>'网站名称',
 
-//数据库连接
-define('DB_HOST','localhost');
+	//cookie设置
+	'COOKIE_PRE'=>'pq_',
 
-define('DB_USER','root');
+	'COOKIE_DOMAIN'=>'',
 
-define('DB_PASSWORD','');
+	'COOKIE_PATH'=>'/',
 
-define('DB_CHARSET','utf8');
+	//确定目录
+	'APP_DIR'=>'Controller',
 
-define('DB_NAME','pqframe');
+	'API_DIR'=>'Controller',
 
-define('DB_TABLE_PRE','pq_');
+	'MODEL_DIR'=>'Model',
 
-define('PCONNECT',0);
+	'VIEW_DIR'=>'View',
 
-//cookie设置
-define('COOKIE_PRE','pq_');
+	//确定模块名称
+	'DEFAULT_MODULE'=>'app',
 
-define('COOKIE_DOMAIN','');
+	'DEFAULT_CONTROLLER'=> 'index',
+	
+	//开启debug
+	'DEBUG'=>true,
 
-define('COOKIE_PATH','/');
+	//数据库连接
+	'DB' => array(
+		'MAIN'=> array(
+			'DB_HOST'=>'localhost',
 
+			'DB_USER'=>'root',
 
-//确定目录
-define('APP_DIR','App');
+			'DB_PASSWORD'=>'',
 
-define('API_DIR','App');
+			'DB_CHARSET'=>'utf8',
 
-define('MODEL_DIR','Model');
+			'DB_NAME'=>'pqframe',
 
-define('THEME_DIR','Theme');
+			'DB_TABLE_PRE'=>'jh_',
 
-//确定模块名称
-define('DEFAULT_MODULE','app');
-
-define('DEFAULT_APP', 'index');
-
-//开启debug
-define('DEBUG',true);
+			'PCONNECT'=>0,
+		)
+	)
+);

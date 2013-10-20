@@ -15,7 +15,7 @@ class View extends Core
     public $config=array();              
    
     //模板文件夹
-    public $template_dir = '';
+    public $view_dir = '';
                      
     public $cache_dir = '';
     
@@ -31,9 +31,17 @@ class View extends Core
     
     public $display_modern = 'put';    //put get
            
-    public function __construct()
+    public function __construct($view_dir,$module)
     {
-        
+        $this->view_dir = $view_dir;
+        if (is_dir(ROOT.'/'.$Config['VIEW_DIR']))
+		{
+			$view->setConfig('common_dir',$this->view_dir .'/common');
+			$view->setConfig('common_css_dir',$this->view_dir .'/common/css');
+			$view->setConfig('common_js_dir', $this->view_dir .'/common/js');
+			$view->setConfig('common_image_dir', $this->view_dir .'/common/images');
+		}
+        $this->setModule($module);
     }
     
 	public function assign($var=null,$value=null)
@@ -56,12 +64,20 @@ class View extends Core
 		if(!is_array($var))
 			$this->config[$var] = $value;	
 		else
-			$this->config = array_merge($var,$this->config);
+			$this->config = array_merge($this->config,$var);
 	}
 	
 	public function setModule($module)
 	{
-		if (isset($module)) $this->module = $module;
+		$this->module = $module;
+		if (is_dir(ROOT.'/'.$this->view_dir.'/'.$this->module))
+		{
+			$module_path = $this->view_dir.'/'.$this->module;
+			$view->setConfig('dir',$module_path);
+			$view->setConfig('css_dir',$module_path.'/css');
+			$view->setConfig('js_dir',$module_path.'/js');
+			$view->setConfig('image_dir',$module_path.'/images');
+		}
 	}
 	
 	public function before_init()
@@ -85,7 +101,7 @@ class View extends Core
     	$this->before_init();    	
     	if ($type === '') $type = $this->display_modern;
     	if($template === '')  $template = $this->default_template;
-    	$template = $this->template_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
+    	$template = $this->view_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
         if(!is_file($template)) $this->error('template:'.$template.' no exists');
         
         import('Page');

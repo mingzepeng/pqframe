@@ -5,10 +5,10 @@ define('IN',true);
 
 session_start(); 
 
-include('Config/config.php');
+$Config = include('Config/config.php');
 
 //设置区域时间
-date_default_timezone_set(DEFAULT_TIME_ZONE); 
+date_default_timezone_set($Config['DEFAULT_TIME_ZONE']); 
 
 define('START_TIME',time());
 
@@ -24,9 +24,8 @@ define('DATETIME',DATE.' '.TIME);
 
 //加载必备文件
 include('Core/Core.php');
-include('Core/Db/dbmysql.class.php');
+include('Lib/Core.func.php');
 include('Core/Model.php');
 include('Core/View.php');
-include('Core/App.php');
 include('Core/Controller.php');
-include('Lib/Core.func.php');
+include('Core/App.php');

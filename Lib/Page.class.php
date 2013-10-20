@@ -4,7 +4,7 @@ class Page
 {
 	public static $config = array();
 
-	public static function import($files)
+	public static function import($files,$baseDir)
 	{	
 		$dir = self::$config['common_dir'];
 		if(!is_array($files)) $files = explode(',',$files);

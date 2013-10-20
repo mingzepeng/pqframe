@@ -4,8 +4,11 @@
         <meta charset="utf-8">
         <title>pqframe</title>
         <?php
-        Template::importCommonCSS('reset,common');
+        Page::importCommonCSS('reset,common');
+        Page::importCommonJS('jquery');
+        Page::import('modal');
         ?>
+
     <style type="text/css">
     p{text-align: center;font-size: 18px;padding-top: 30px;}
     </style>   
