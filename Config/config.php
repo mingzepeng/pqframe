@@ -1,10 +1,17 @@
 <?php
+
+//全局配置文件
+
 return array(
+
+	//开启debug
+	'DEBUG'=>true,
+
 	'DEFAULT_TIME_ZONE'=>'Asia/Shanghai',
 
 	'HOST'=>'http://localhost/pqframe',
 
-	'APP_NAME'=>'网站名称',
+	'APP_NAME'=>'pqframe',
 
 	//cookie设置
 	'COOKIE_PRE'=>'pq_',
@@ -16,8 +23,6 @@ return array(
 	//确定目录
 	'APP_DIR'=>'Controller',
 
-	'API_DIR'=>'Controller',
-
 	'MODEL_DIR'=>'Model',
 
 	'VIEW_DIR'=>'View',
@@ -27,12 +32,14 @@ return array(
 
 	'DEFAULT_CONTROLLER'=> 'index',
 	
-	//开启debug
-	'DEBUG'=>true,
+
 
 	//数据库连接
 	'DB' => array(
 		'MAIN'=> array(
+			
+			'DB_TYPE'=>'mysql',
+
 			'DB_HOST'=>'localhost',
 
 			'DB_USER'=>'root',

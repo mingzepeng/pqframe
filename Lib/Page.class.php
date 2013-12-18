@@ -4,9 +4,14 @@ class Page
 {
 	public static $config = array();
 
-	public static function import($files,$baseDir)
+	public static $page = array();
+
+	public static $data = array();
+
+	public static function import($files,$baseDir=null)
 	{	
 		$dir = self::$config['common_dir'];
+		if($baseDir !== null) $dir .= SEP.baseDir;
 		if(!is_array($files)) $files = explode(',',$files);
 		foreach ($files as $file)
 		{

@@ -7,60 +7,66 @@
  * @version 1.0  2012.8.30
  */
 class View extends Core
-{
-	public $_name = 'View';
-	
-	public $data = array();
+{	
+	protected $data = array();
 
-    public $config=array();              
+	protected $page = array();
+
+    protected $config = array();              
    
-    //模板文件夹
-    public $view_dir = '';
-                     
+    //视图文件夹名称
+    protected $view_dir = '';
+
+    //当前模块
+    protected $module = '';
+    
+
+    //缓存设置  
     public $cache_dir = '';
     
     public $cache_lift_time = 0;
     
-    //当前主题
-    public $module = '';
+
     
     //默认模板名
     public $default_template = 'index';
     
     public $default_template_type = 'html';
     
-    public $display_modern = 'put';    //put get
+    //输出方式 put,get
+    public $display_modern = 'put'; 
            
     public function __construct($view_dir,$module)
     {
         $this->view_dir = $view_dir;
-        if (is_dir(ROOT.'/'.$Config['VIEW_DIR']))
+        if (is_dir(ROOT.SEP.$view_dir))
 		{
-			$view->setConfig('common_dir',$this->view_dir .'/common');
-			$view->setConfig('common_css_dir',$this->view_dir .'/common/css');
-			$view->setConfig('common_js_dir', $this->view_dir .'/common/js');
-			$view->setConfig('common_image_dir', $this->view_dir .'/common/images');
+			$this->setConfig('common_dir', $this->view_dir .'/common');
+			$this->setConfig('common_css_dir', $this->view_dir .'/common/css');
+			$this->setConfig('common_js_dir', $this->view_dir .'/common/js');
+			$this->setConfig('common_image_dir', $this->view_dir .'/common/images');
 		}
         $this->setModule($module);
     }
     
-	public function assign($var=null,$value=null)
+	public function assign($key,$value=null)
 	{
-		if ($var == null) return;
 		if (!is_array($var))
 			$this->data[$var] = $value;
 		else 
-			$this->data = array_merge($var,$this->data);	
+			$this->data = array_merge($this->data,$key);	
 	}
 	
-	public function assignPage($var=null,$value=null)
+	public function setPage($var,$value=null)
 	{
-		$this->assign($var,$value.'.'.$this->default_template_type);
+		if (!is_array($var))
+			$this->page[$var] = $value.'.'.$this->default_template_type;
+		else 
+			foreach ($var as $key => $val) $this->page[$key] = $val.'.'.$this->default_template_type;
 	}
 	
-	public function setConfig($var=null,$value=null)
+	public function setConfig($var,$value=null)
 	{
-		if($var==null) return;
 		if(!is_array($var))
 			$this->config[$var] = $value;	
 		else
@@ -70,60 +76,50 @@ class View extends Core
 	public function setModule($module)
 	{
 		$this->module = $module;
-		if (is_dir(ROOT.'/'.$this->view_dir.'/'.$this->module))
+		if (is_dir(ROOT.SEP.$this->view_dir.SEP.$this->module))
 		{
 			$module_path = $this->view_dir.'/'.$this->module;
-			$view->setConfig('dir',$module_path);
-			$view->setConfig('css_dir',$module_path.'/css');
-			$view->setConfig('js_dir',$module_path.'/js');
-			$view->setConfig('image_dir',$module_path.'/images');
+			$this->setConfig('dir',$module_path);
+			$this->setConfig('css_dir',$module_path.'/css');
+			$this->setConfig('js_dir',$module_path.'/js');
+			$this->setConfig('image_dir',$module_path.'/images');
 		}
-	}
-	
-	public function before_init()
-	{
-
-	}
-	
-	public function after_init()
-	{
-
 	}
 
 	/**
-	 * 
 	 *
 	 * @param string $file
 	 * @param string $type = get put
 	 */
     public function display($template='', $type='put')
-    {
-    	$this->before_init();    	
+    {   	
     	if ($type === '') $type = $this->display_modern;
-    	if($template === '')  $template = $this->default_template;
+    	if ($template === '')  $template = $this->default_template;
     	$template = $this->view_dir.'/'.$this->module.'/'.$template.'.'.$this->default_template_type;
+    	//var_dump($template);
         if(!is_file($template)) $this->error('template:'.$template.' no exists');
         
         import('Page');
         Page::$config = $this->config;
+        Page::$page = $this->page;
+        Page::$data = $this->data;
     	extract($this->data);
     	header("Content-type: text/html; charset=utf-8");
     	ob_start();
         include($template);
         $contents = ob_get_clean();
-    	$this->after_init();
 		
     	if ($type === 'put')
     	{
     		echo $contents;
-	  		if(DEBUG && !empty(Controller::$log_data))
+	  		if(Config::get('DEBUG') && !empty(Controller::$log_data))
 			{
 				$log_data = array('log'=>array_map('urlencode_deep',Controller::$log_data));
 				//var_dump($log_data);
 				$log_data = urldecode(json_encode($log_data));
 				//var_dump(Controller::$log_data);
-				$log_file = ROOT.'/Lib/log.inc.php';
-				include($log_file);
+				//$log_file = ROOT.'/Lib/log.inc.php';
+				import("log","inc");
 			}
     		return true;
     	}

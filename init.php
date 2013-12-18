@@ -1,16 +1,21 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ALL | E_NOTICE);
 
 define('IN',true);
 
 session_start(); 
 
-$Config = include('Config/config.php');
+include("Lib/Config.class.php");
+
+Config::set(include('Config/config.php'));
 
 //设置区域时间
-date_default_timezone_set($Config['DEFAULT_TIME_ZONE']); 
+date_default_timezone_set(Config::get('DEFAULT_TIME_ZONE')); 
 
 define('START_TIME',time());
+
+
+define('SEP', DIRECTORY_SEPARATOR);
 
 //设置根目录
 define('ROOT',dirname(__FILE__));
