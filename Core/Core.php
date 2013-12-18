@@ -1,5 +1,5 @@
 <?php
-public class Core
+class Core
 {
 	protected function error($msg)
 	{
